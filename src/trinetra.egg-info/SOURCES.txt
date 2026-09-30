@@ -1,0 +1,14 @@
+README.md
+pyproject.toml
+src/trinetra/__init__.py
+src/trinetra.egg-info/PKG-INFO
+src/trinetra.egg-info/SOURCES.txt
+src/trinetra.egg-info/dependency_links.txt
+src/trinetra.egg-info/top_level.txt
+src/trinetra/contributor/__init__.py
+src/trinetra/detectors/__init__.py
+src/trinetra/features/__init__.py
+src/trinetra/parsers/__init__.py
+src/trinetra/pipeline/__init__.py
+src/trinetra/reporting/__init__.py
+src/trinetra/utils/__init__.py

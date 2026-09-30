@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# TRI-NETRA local datasets
+data/raw/*
+data/processed/*
+data/samples/*
+
+# Local model weights
+models/*
+
+# Generated outputs
+outputs/findings/*
+outputs/reports/*
+outputs/embeddings/*
+
+# Large model/data files
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+
+# OS
+.DS_Store
+Thumbs.db
