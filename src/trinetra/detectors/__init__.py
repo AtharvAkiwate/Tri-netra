@@ -1,5 +1,20 @@
 """Layer 1C detector APIs."""
 
+from trinetra.detectors.phash import (
+    DEFAULT_PHASH_THRESHOLD,
+    ImageBackendUnavailableError,
+    PHashCluster,
+    PHashClusterMember,
+    PHashDuplicateDetector,
+    PHashFailure,
+    PHashImage,
+    PHashPair,
+    PHashResult,
+    PerceptualHashError,
+    hamming_distance,
+    perceptual_hash,
+)
+
 from trinetra.detectors.near_duplicate import (
     DEFAULT_SIMILARITY_THRESHOLD,
     DuplicateCluster,
@@ -47,6 +62,18 @@ from trinetra.detectors.ood import (
 )
 
 __all__ = [
+    "DEFAULT_PHASH_THRESHOLD",
+    "ImageBackendUnavailableError",
+    "PHashCluster",
+    "PHashClusterMember",
+    "PHashDuplicateDetector",
+    "PHashFailure",
+    "PHashImage",
+    "PHashPair",
+    "PHashResult",
+    "PerceptualHashError",
+    "hamming_distance",
+    "perceptual_hash",
     "DEFAULT_SIMILARITY_THRESHOLD",
     "DuplicateCluster",
     "DuplicateMember",
