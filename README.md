@@ -1,711 +1,241 @@
 # TRI-NETRA
 
-## Trustworthy AI Security & Assurance Platform
+**Trustworthy AI Security & Assurance Platform**
 
-> **Data. Model. Output. One assurance layer.**
+*Data. Model. Output. One assurance layer.*
 
-TRI-NETRA is an offline-capable AI security and assurance platform designed to assess the integrity of computer-vision pipelines across three critical layers:
-
-**Training Data → AI Model → Inference Output**
-
-The system is designed for environments where computer-vision systems may depend on datasets, models, and inference pipelines contributed by multiple sources.
-
----
+TRI-NETRA is intended to provide evidence-based assurance across computer-vision
+training data integrity, model integrity, inference/output provenance,
+distribution shift and environmental anomalies, and analyst governance and
+auditability. It is designed for offline and air-gapped security contexts where
+datasets, models, and inference pipelines may come from multiple sources. The
+five-layer platform is being developed incrementally; only Layers 1 and 5 are
+currently complete.
 
 ## Problem
 
-Modern computer-vision pipelines can contain security and integrity risks that traditional cybersecurity tools may not identify effectively.
+Computer-vision pipelines can face risks that are difficult to identify through
+traditional cybersecurity controls alone, including training-data poisoning,
+label manipulation, duplicate flooding, out-of-distribution data, model
+modification, inference-output tampering, replay, environmental shifts, and
+gaps in traceable evidence. TRI-NETRA aims to connect evidence across these
+stages. Its implemented detectors report review signals and limitations; they
+do not establish malicious intent or measured real-world detection accuracy.
 
-Potential risks include:
+## Team Contribution Workflow
 
-* Training-data poisoning
-* Systematic label manipulation
-* Near-duplicate flooding
-* Out-of-distribution (OOD) data
-* Hidden or backdoor-like model behaviour
-* Model substitution or modification
-* Inference-output tampering
-* Replay of previously generated outputs
-* Distribution shifts caused by terrain, sensors, illumination, or acquisition conditions
-* Lack of traceable evidence across contributors and pipeline stages
+Use a feature branch for each assigned module. Do not develop directly on
+`main`.
 
-TRI-NETRA provides an evidence-based assurance layer for these risks.
-
----
-
-# Core Architecture
-
-```text
-                 TRI-NETRA
-                     │
-        ┌────────────┼────────────┐
-        │            │            │
-        ▼            ▼            ▼
-   DATA LAYER    MODEL LAYER   OUTPUT LAYER
-        │            │            │
-        ▼            ▼            ▼
-   Integrity      Behavioural   Provenance
-   Analysis      Analysis      & Integrity
-        │            │            │
-        └────────────┼────────────┘
-                     ▼
-             Assurance Engine
-                     │
-                     ▼
-            Evidence + Risk
-                     │
-                     ▼
-             Governance UI
+```bash
+git clone <repository>
+cd Tri-netra
+git checkout main
+git pull origin main
+git checkout -b feature/<your-feature>
 ```
 
----
+Then follow the team process:
 
-# Project Layers
+1. Clone the repository.
+2. Create a personal feature branch.
+3. Make changes only in the assigned module.
+4. Add or update tests.
+5. Run the full test suite.
+6. Review the diff.
+7. Commit the change.
+8. Push the feature branch.
+9. Open a Pull Request.
+10. Complete team review.
+11. Merge the approved Pull Request into `main`.
+12. Pull the updated `main` branch before starting the next task.
 
-## Layer 1 — Data Integrity Engine
+### Convenience commit-and-push command
 
-Completed for this assignment through Layer 1H. The implemented Data Integrity
-scope is summarized under [Final Data Integrity Status](#final-data-integrity-status).
-
-Responsibilities:
-
-* COCO dataset parsing
-* YOLO dataset parsing
-* COCO and YOLO dataset parsing into a normalized dataset representation
-* Local-weight DINOv2 ViT-S/14 primary feature extraction architecture and explicit run-level ResNet-50 fallback
-* Embedding-based cosine near-duplicate detection
-* Neighborhood-based label consistency analysis
-* Reference-based OOD / distribution-shift analysis
-* Provenance-aware evidence aggregation by contributor, source, and batch when metadata exists
-* Independent pixel-based pHash duplicate detection
-* Silhouette validation of feature-space separation against assigned labels
-* Typed, versioned detector results and analyst-readable evidence
-
-Layer 1 must be usable independently from the user interface.
-
----
-
-## Layer 2 — Model Integrity Engine
-
-Planned capabilities:
-
-* Behavioural fingerprinting
-* Reference-battery testing
-* Trigger-based analysis
-* Activation analysis
-* Backdoor-like behaviour detection
-* White-box and black-box assessment
-* Graceful handling of limited model access
-
-Supported model formats are intended to include:
-
-* PyTorch
-* TorchScript
-* ONNX
-
----
-
-## Layer 3 — Inference Integrity & Provenance
-
-Planned capabilities:
-
-* Input hashing
-* Model identity/weight digest
-* Configuration binding
-* Prediction binding
-* Timestamp and nonce controls
-* Digital signatures
-* Replay detection
-* Tamper detection
-* Tamper-evident inference logs
-
----
-
-## Layer 4 — Distribution Shift & Anomaly Assessment
-
-Planned capabilities:
-
-* Distribution-shift detection
-* Sensor/environmental variation analysis
-* Terrain/season/illumination analysis
-* OOD assessment
-* Confidence and evidence reporting
-* Distinguishing drift from suspected manipulation where evidence permits
-
----
-
-## Layer 5 — Governance & Analyst Interface
-
-An optional Stage 1 Streamlit governance UI foundation is implemented. It
-consumes dashboard view models and typed Data Integrity results through
-provider/adaptor interfaces; it does not contain detector logic.
-
-Available in this foundation:
-
-* Demo/sample and TRI-NETRA Pipeline modes
-* Overview and finding detail views
-* Layer 1A image/annotation context, with dataset bounding boxes identified as annotations
-* A clearly marked synthetic demo heatmap; pipeline heatmaps only when an aligned artifact is supplied
-* Navigation placeholders for unconnected modules
-* Generic ACCEPT / REVIEW / QUARANTINE analyst decisions with required actor, rationale, and explicit confirmation
-* A local append-only audit history and JSON download that keeps analyst decisions separate from detector recommendations
-
-Reserved for later implementation:
-
-* Real Grad-CAM generation and model attribution
-* Investigation history and connected Model/Inference Integrity providers
-
-Layer 5 remains a presentation layer and consumes outputs generated by the underlying engines.
-
----
-
-# Layer 1 Architecture
-
-The implemented Data Integrity flow is:
-
-```text
-Layer 1A parsers -> normalized Dataset and labels
-       |                         |
-       v                         +------------------------------+
-Layer 1B -> FeatureBatch                                       |
-       |                                                        v
-       +-> Layer 1C cosine duplicates        Layer 1G pHash from local image files
-       +-> Layer 1D label-neighborhood analysis                 |
-       +-> Layer 1E reference distribution shift                |
-       +-> Layer 1H silhouette validation                       |
-                          |                                     |
-                          +------------------+------------------+
-                                             v
-                        Layer 1F provenance aggregation, when metadata exists
-                                             |
-                                             v
-                              Typed detector results and evidence
+```bash
+git add . && git commit -m "feat: describe your change" && git push -u origin HEAD
 ```
 
-Layer 1C and Layer 1G are independent evidence paths: Layer 1C compares
-embeddings, while Layer 1G compares image perceptual hashes. Layers 1D, 1E,
-and 1H consume existing Layer 1B embeddings and do not run another encoder.
-Layer 1F aggregates available evidence and does not infer missing provenance.
+Replace the commit message with a concise description. This pushes the current
+branch, which may be a feature branch rather than `main`. Run it only after
+tests and diff review pass; do not use it to bypass Pull Request review. The
+normal team process remains feature branch → push → Pull Request → review →
+merge.
 
-The following original overview is conceptual; standardized assurance JSON and
-the Layer 5 UI are future work, not claims about the completed Layer 1A–1H APIs.
+For clearer review, the safer individual commands are:
 
-```text
-Dataset
-   │
-   ├── COCO Parser
-   └── YOLO Parser
-           │
-           ▼
-   Normalized Dataset
-           │
-     ┌─────┼───────────────┐
-     ▼     ▼               ▼
-  DINOv2  pHash          Labels
- Features Analysis       Analysis
-     │     │               │
-     └─────┼───────────────┘
-           ▼
-    Anomaly Detection
-           │
-           ▼
- Contributor Risk Index
-           │
-           ▼
- Evidence-Based Findings
-           │
-           ▼
- Standardized JSON Output
-           │
-           ▼
-       Layer 5 UI
+```bash
+git status --short
+git diff
+git add <assigned-files>
+git diff --cached
+git commit -m "feat: describe your change"
+git push -u origin HEAD
 ```
 
----
+Never use force push as a substitute for resolving branch history.
 
-# Standardized Finding Format
+## TRI-NETRA Five-Layer Architecture
 
-Every detection module should eventually produce findings using a common structure.
+The rows below are the five **top-level platform layers**. Layer 1A–1H are an
+internal implementation breakdown of Layer 1 only; they are not additional
+top-level layers.
 
-Example:
+| Layer | Module / Focus Area | Team Lead | Key Technical Deliverables | Current Status |
+| --- | --- | --- | --- | --- |
+| **Layer 1 — Data Integrity Engine** | Dataset, feature, label, duplicate, provenance, and cluster-separation evidence | Assigned team member | DINOv2 / ResNet-50 feature extraction script; k-NN distance ratios and silhouette scoring for clean-label poison analysis; pHash + cosine duplicate sweeping and Contributor Risk Index (CRI)-related aggregation; COCO JSON and YOLO TXT parsers; air-gapped setup/testing, sample clean/poisoned datasets, and end-to-end testing where applicable | **COMPLETE** for the internal 1A–1H implementation. Real DINOv2/ResNet inference was not verified in this Windows environment. Layer 1D currently uses neighborhood disagreement evidence; no calibrated or real-world accuracy claim is made. |
+| **Layer 2 — Model Security & Neuro-Surgery** | Model behavior, backdoor analysis, and model repair | Assigned team member | White-Box Activation Clustering & Spectral Signatures; Black-Box Artificial Brain Stimulation (ABS) fallback; Auto Neuro-Surgery engine for layer pruning and `< 2 min` backdoor repair; ONNX and PyTorch `.pt` / `.pth` model loader | **IN DEVELOPMENT / ASSIGNED.** These deliverables are planned; no Layer 2 implementation is present in the current repository. |
+| **Layer 3 — Inference Provenance & Hardware Seal** | Verifiable inference identity, output provenance, and sensor identity | Assigned team member | Ed25519 signing of image, model, output, and timestamp; SHA-256 Merkle-tree audit log generator; PRNU camera sensor fingerprinting | **IN DEVELOPMENT / ASSIGNED.** These deliverables are planned; no Layer 3 implementation is present in the current repository. |
+| **Layer 4 — Distribution Shift & Weather Engine** | Environmental context and distribution-shift analysis | Assigned team member | Maximum Mean Discrepancy (MMD) in RKHS feature space; Mahalanobis distance for OOD detection; weather-vs-attack classifier separating conditions such as rain/fog from active laser attacks | **IN DEVELOPMENT / ASSIGNED.** Layer 1E already provides a reference-set nearest-cosine distribution-shift signal inside Layer 1. Layer 4's MMD, Mahalanobis, and weather-vs-attack deliverables are not implemented. |
+| **Layer 5 — Streamlit Governance UI** | Analyst-facing review, decisions, and auditability | Assigned team member | Streamlit frontend; bounding-box view; Grad-CAM red threat heatmap overlay; ACCEPT, REVIEW, and QUARANTINE actions; one-click audit-log JSON export | **COMPLETE** for the current UI slice. Grad-CAM generation is not implemented; the synthetic demo heatmap is labeled **DEMO HEATMAP — NOT MODEL OUTPUT**. |
 
-```json
-{
-  "image_id": "img_00421",
-  "asset": "images/img_00421.jpg",
-  "risk_type": "near_duplicate",
-  "severity": "medium",
-  "confidence": 0.91,
-  "evidence": {
-    "phash_distance": 2,
-    "cosine_similarity": 0.97
-  },
-  "reason": "Image is highly similar to another dataset sample.",
-  "recommended_action": "REVIEW"
-}
+## Work Done
+
+### Layer 1 — Data Integrity Engine
+
+**Status: COMPLETE**
+
+The internal Layer 1 implementation consists of:
+
+| Internal component | Implemented functionality |
+| --- | --- |
+| **1A** | COCO JSON and YOLO TXT dataset parsing |
+| **1B** | DINOv2 primary / ResNet-50 fallback feature-extraction architecture and standardized feature batches |
+| **1C** | Cosine-similarity near-duplicate candidates and clusters |
+| **1D** | Label manipulation / clean-label neighborhood anomaly evidence |
+| **1E** | Reference-based OOD / distribution-shift detection |
+| **1F** | Contributor, source, and batch evidence aggregation when provenance is available |
+| **1G** | pHash duplicate detection |
+| **1H** | Silhouette validation of feature-space separation |
+
+The official k-NN distance-ratio technique is not currently implemented as a
+Layer 1D score: Layer 1D reports configurable neighborhood-disagreement
+evidence. Air-gapped validation, clean/poisoned sample preparation, and
+end-to-end attack-scenario testing remain environment/dataset-dependent work;
+the recorded software test results below do not claim those evaluations.
+
+Final documented Data Integrity test result: **170 passed, 1 skipped, 0 failed**
+(**171 total**) in **1.68s**. These tests validate implemented software
+behavior; they do not establish real-world attack-detection accuracy. Real
+DINOv2/ResNet inference was not verified in the Windows environment because of
+the documented PyTorch/Windows security runtime restriction.
+
+### Layer 5 — Streamlit Governance UI
+
+**Status: COMPLETE** for the implemented governance UI slice.
+
+Implemented functionality includes the Streamlit mission-control dashboard,
+DEMO / SAMPLE mode, a TRI-NETRA PIPELINE provider architecture, Layer 1 result
+adapters, finding detail views, dataset-annotation bounding boxes, ACCEPT /
+REVIEW / QUARANTINE analyst decisions, actor and rationale capture with
+evidence-review confirmation, a local append-only JSONL audit store, an audit
+viewer, JSON export, and extension points/placeholders for future modules.
+
+The audit history is local/offline; generated audit files are Git-ignored, and
+no cloud service is required. Demo decisions are explicitly non-operational
+sample records. Real Grad-CAM generation is not implemented. The demo heatmap
+is synthetic and labeled **DEMO HEATMAP — NOT MODEL OUTPUT**.
+
+Final governance UI test result: **186 passed, 1 skipped, 0 failed** in
+**2.85s**. The tests do not measure model or detector accuracy.
+
+## Current Project Status
+
+| Top-level layer | Status |
+| --- | --- |
+| Layer 1 — Data Integrity Engine | **COMPLETE** |
+| Layer 2 — Model Security & Neuro-Surgery | **IN DEVELOPMENT / ASSIGNED** |
+| Layer 3 — Inference Provenance & Hardware Seal | **IN DEVELOPMENT / ASSIGNED** |
+| Layer 4 — Distribution Shift & Weather Engine | **IN DEVELOPMENT / ASSIGNED** |
+| Layer 5 — Streamlit Governance UI | **COMPLETE** |
+
+## Running the Current UI
+
+From a fresh clone, create and activate a virtual environment, then install the
+optional UI dependencies:
+
+```powershell
+python -m venv .venv
+.venv\Scripts\activate
+pip install -e ".[ui]"
+python -m streamlit run src/trinetra/ui/app.py
 ```
 
-The exact schema may evolve during development, but compatibility with the future governance layer must be preserved.
+DEMO / SAMPLE mode can be used immediately. TRI-NETRA PIPELINE mode expects a
+`DataIntegrityRun` supplied by a pipeline runner; when no run is supplied, the
+UI shows an empty state and does not fabricate detector results.
 
----
+The UI is a presentation/governance layer and does not run detectors. The
+dashboard contracts and Data Integrity adapters are in `trinetra.pipeline`;
+the governance decision and local audit store are in `trinetra.governance`.
+See [Governance UI documentation](docs/governance-ui.md) for the local audit
+store path and export behavior.
 
-# Repository Structure
+## Testing
+
+Run the complete suite from the repository root:
+
+```powershell
+python -m pytest -q
+```
+
+| Scope | Passed | Skipped | Failed | Total | Recorded runtime |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Data Integrity Layers 1A–1H | 170 | 1 | 0 | 171 | 1.68s |
+| Governance UI / complete current suite | 186 | 1 | 0 | 187 | 2.85s |
+
+These are software test results, not detection accuracy metrics. No measured
+precision, recall, F1, ROC-AUC, attack-detection rate, or real-world detection
+performance is claimed.
+
+## Repository Structure
 
 ```text
 TRI-NETRA/
-│
 ├── README.md
-├── LICENSE
-├── .gitignore
 ├── pyproject.toml
-├── requirements.txt
-│
 ├── configs/
-│
-├── data/
-│   ├── raw/
-│   ├── processed/
-│   └── samples/
-│
-├── models/
-│
-├── src/
-│   └── trinetra/
-│       ├── parsers/
-│       ├── features/
-│       ├── detectors/
-│       ├── contributor/
-│       ├── reporting/
-│       ├── pipeline/
-│       └── utils/
-│
-├── scripts/
-│
-├── tests/
-│
-├── outputs/
-│   ├── findings/
-│   ├── reports/
-│   └── embeddings/
-│
-└── docs/
+├── data/                         # Local datasets; not committed
+├── models/                       # Local model weights; not committed
+├── outputs/                      # Generated local artifacts; not committed
+├── docs/
+├── src/trinetra/
+│   ├── parsers/                  # Layer 1A
+│   ├── features/                 # Layer 1B
+│   ├── detectors/                # Layers 1C–1E, 1G–1H
+│   ├── contributor/              # Layer 1F
+│   ├── pipeline/                 # Dashboard contracts and result adapters
+│   ├── governance/               # Analyst decisions and local audit store
+│   └── ui/                       # Optional Streamlit application
+└── tests/
 ```
 
----
-
-# Development Philosophy
-
-TRI-NETRA is being developed as a modular security system rather than a single script.
-
-### Principles
-
-1. **Modularity**
-   Each security capability should have a clearly defined responsibility.
-
-2. **Evidence over claims**
-   A finding should contain measurable evidence wherever possible.
-
-3. **Explainability**
-   The system should explain why an asset was flagged.
-
-4. **Model agnosticism**
-   Detection components should avoid unnecessary dependence on one model architecture.
-
-5. **Offline execution**
-   Final deployment must not depend on cloud services or external APIs.
-
-6. **Graceful degradation**
-   If a required capability is unavailable, the system should report the limitation rather than silently producing a misleading result.
-
-7. **Reproducibility**
-   Results should be reproducible using documented configuration and inputs.
-
-8. **Layer separation**
-   Detection engines should not become tightly coupled to the Streamlit interface.
-
----
-
-# Development vs Final Execution
-
-## Development
-
-Internet access may be used for:
-
-* Installing dependencies
-* Downloading model weights
-* Obtaining datasets
-* Development documentation
-* Testing
-
-## Final Execution
-
-TRI-NETRA is intended to operate in offline / air-gapped environments.
-
-The final system should not require:
-
-* Cloud APIs
-* External inference APIs
-* Online databases
-* Internet connectivity
-* Third-party runtime services
-
-Required model weights and resources should be available locally.
-
----
-
-# How Team Members Should Contribute
-
-## Step 1 — Clone the repository
-
-```bash
-git clone <repository-url>
-cd TRI-NETRA
-```
-
-## Step 2 — Create a branch
-
-Do not directly modify `main`.
-
-Use a descriptive branch:
-
-```bash
-git checkout -b feature/coco-parser
-```
-
-Examples:
-
-```text
-feature/dinov2-extractor
-feature/yolo-parser
-feature/phash-detector
-feature/cri-engine
-feature/poison-detector
-feature/streamlit-dashboard
-fix/parser-validation
-```
-
-## Step 3 — Understand the module boundary
-
-Before writing code, identify:
-
-* What module are you modifying?
-* What input does it receive?
-* What output does it produce?
-* Which existing modules does it depend on?
-* Which future layer consumes its output?
-
-Do not modify unrelated modules.
-
-## Step 4 — Implement
-
-Keep implementation inside the appropriate directory.
-
-For example:
-
-```text
-COCO work
-→ src/trinetra/parsers/
-
-DINOv2 work
-→ src/trinetra/features/
-
-Duplicate detection
-→ src/trinetra/detectors/
-
-CRI
-→ src/trinetra/contributor/
-```
-
-## Step 5 — Add tests
-
-Every new detection or processing component should have tests.
-
-At minimum test:
-
-* Normal input
-* Invalid input
-* Empty input
-* Edge cases
-* Expected output format
-
-## Step 6 — Run the test suite
-
-```bash
-pytest
-```
-
-Do not submit code that breaks existing tests.
-
-## Step 7 — Document the change
-
-Update the relevant documentation in:
-
-```text
-docs/
-```
-
-Explain:
-
-* What was implemented
-* How it works
-* Inputs
-* Outputs
-* Important assumptions
-* Known limitations
-* How to run it
-
-## Step 8 — Commit
-
-Use a meaningful commit message:
-
-```bash
-git add .
-git commit -m "feat: add COCO dataset parser"
-```
-
-Avoid messages such as:
-
-```text
-update
-final
-changes
-new code
-working
-```
-
-## Step 9 — Push your branch
-
-```bash
-git push origin feature/coco-parser
-```
-
-## Step 10 — Pull Request
-
-Create a Pull Request into `main`.
-
-The PR should explain:
-
-* What changed
-* Why it was needed
-* How it was tested
-* Example output
-* Known limitations
-
----
-
-# Contribution Rules
-
-### DO
-
-* Keep modules focused
-* Write tests
-* Document assumptions
-* Preserve existing interfaces
-* Use meaningful variable/function names
-* Report limitations honestly
-* Keep security evidence reproducible
-
-### DO NOT
-
-* Hardcode local file paths
-* Commit datasets unnecessarily
-* Commit secrets or API keys
-* Commit large model weights unless explicitly required
-* Break the standardized output schema without discussion
-* Put detection logic inside Streamlit
-* Claim detection success without validation
-* Introduce cloud dependencies into the final runtime
-* silently ignore errors
-
----
-
-# Data and Model Files
-
-Large datasets and model weights should generally not be committed directly to Git.
-
-Use:
-
-```text
-data/
-models/
-```
-
-for local development resources.
-
-Document how teammates can obtain or prepare the required resources.
-
-Never commit:
-
-* passwords
-* API keys
-* credentials
-* private datasets
-* sensitive operational data
-
----
-
-# Current Development Status
-
-## Final Data Integrity Status
-
-Layers 1A–1H are implemented and covered by the final repository test run.
-Detector scores and thresholds are configurable analytical signals; the test
-suite does not measure real-world detection accuracy or establish malicious
-intent.
-
-| Layer | Implemented functionality | Status |
-| --- | --- | --- |
-| 1A | COCO JSON and YOLO TXT parsing into normalized dataset/image/annotation models | Complete |
-| 1B | DINOv2 ViT-S/14 primary extractor architecture, standardized feature batches, local-weight loading, and explicit run-level ResNet-50 fallback | Implemented; real model inference was not verified by the final test run |
-| 1C | Exact cosine-similarity near-duplicate pairs and connected clusters | Complete |
-| 1D | Top-k embedding-neighborhood label consistency evidence | Complete |
-| 1E | Reference-set nearest-cosine distribution-shift signal | Complete |
-| 1F | Optional contributor/source/batch evidence aggregation with transparent configurable weights | Complete |
-| 1G | Deterministic DCT pHash and Hamming-distance duplicate candidates | Complete |
-| 1H | Cosine-distance silhouette summaries using assigned labels and existing embeddings | Complete |
-
-The final verified suite result was **170 passed, 1 skipped, 0 failed**
-(**171 total**) in **1.85s**. The skipped test is optional; passing tests do
-not establish accuracy, precision, recall, F1, ROC-AUC, attack-detection rate,
-or real-world performance.
-
-The implemented scope is the detector and analysis APIs, typed results, tests,
-and layer documentation. A shared standardized assurance JSON/reporting flow,
-calibrated Contributor Risk Index, measured attack-scenario performance, and
-the Model Integrity, Inference Integrity, and Governance UI layers are not
-claimed as complete here and remain future work.
-
-Layer 1B image feature extraction, including local DINOv2 ViT-S/14 usage and
-preprocessing details, is documented in [`docs/layer1b.md`](docs/layer1b.md).
-Layer 1C near-duplicate detection over Layer 1B embeddings is documented in
-[`docs/layer1c.md`](docs/layer1c.md).
-Layer 1D label-neighborhood consistency analysis is documented in
-[`docs/layer1d.md`](docs/layer1d.md).
-Layer 1E reference-based OOD and distribution-shift analysis is documented in
-[`docs/layer1e.md`](docs/layer1e.md).
-Layer 1F provenance-aware contributor/source evidence aggregation is documented
-in [`docs/layer1f.md`](docs/layer1f.md).
-Layer 1G deterministic pHash image-similarity evidence is documented in
-[`docs/layer1g.md`](docs/layer1g.md).
-Layer 1H silhouette-based feature/label separation analysis is documented in
-[`docs/layer1h.md`](docs/layer1h.md).
-The optional Streamlit Governance UI foundation, provider contracts, and run
-command are documented in [`docs/governance-ui.md`](docs/governance-ui.md).
-
-| Layer                         | Status            |
-| ----------------------------- | ----------------- |
-| Layer 1 — Data Integrity      | Complete (Layers 1A–1H) |
-| Layer 2 — Model Integrity     | Planned           |
-| Layer 3 — Inference Integrity | Planned           |
-| Layer 4 — Distribution Shift  | Planned           |
-| Layer 5 — Governance UI       | Planned           |
-
----
-
-# Layer 1 Development Roadmap
-
-### Phase 1 — Foundation
-
-* Repository architecture
-* Python environment
-* Configuration system
-* Logging
-* Dataset abstraction
-* Common data structures
-
-### Phase 2 — Dataset Processing
-
-* COCO parser
-* YOLO parser
-* Image validation
-* Dataset normalization
-
-### Phase 3 — Visual Representation
-
-* DINOv2 feature extractor
-* GPU acceleration
-* Batch processing
-* Local model loading
-* Embedding persistence
-
-### Phase 4 — Integrity Detection
-
-* pHash duplicate detection
-* Cosine similarity
-* k-NN distance analysis
-* Silhouette analysis
-* Label anomaly detection
-* OOD/anomaly analysis
-
-### Phase 5 — Contributor Analysis
-
-* Contributor metadata support
-* Evidence aggregation
-* Contributor Risk Index
-* Contributor-level reporting
-
-### Phase 6 — Assurance Output
-
-* Common finding schema
-* JSON report
-* Dataset-level summary
-* Evidence storage
-* Future Layer 5 compatibility
-
-### Phase 7 — Validation
-
-* Clean datasets
-* Synthetic attack scenarios
-* Reproducible poisoning tests
-* Duplicate injection tests
-* Label manipulation tests
-* OOD tests
-* False-positive analysis
-* Performance measurement
-
----
-
-# Final Project Goal
-
-TRI-NETRA aims to provide a unified assurance layer across:
-
-```text
-DATA
-  ↓
-MODEL
-  ↓
-INFERENCE
-  ↓
-EVIDENCE
-  ↓
-GOVERNANCE
-```
-
-The final system should not simply say:
-
-> "Threat detected."
-
-It should answer:
-
-```text
-WHAT was detected?
-WHY was it flagged?
-WHAT evidence supports it?
-HOW confident is the system?
-WHICH asset is affected?
-WHAT action is recommended?
-WHAT limitations apply?
-```
-
-This evidence-first approach is central to TRI-NETRA.
-
----
-
-## Project Status
-
-**Project:** TRI-NETRA
-**Title:** Trustworthy AI Security & Assurance Platform
-**Tagline:** Data. Model. Output. One assurance layer.
-**Primary Focus:** Computer-Vision Integrity Assurance
-**Deployment Goal:** Offline / Air-Gapped
-**Data Integrity Assignment:** Complete through Layer 1H
+## Development Principles
+
+1. **Modularity:** keep each capability within a clear module boundary.
+2. **Evidence over claims:** report measurable evidence and known limitations.
+3. **Explainability:** show why an asset or result is presented for review.
+4. **Model agnosticism:** avoid unnecessary dependence on one model architecture.
+5. **Offline execution:** final deployment is intended not to depend on cloud APIs or external runtime services.
+6. **Graceful degradation:** report unavailable capability rather than fabricating a result.
+7. **Reproducibility:** document configuration and input assumptions.
+8. **Layer separation:** keep detection logic out of the Streamlit UI.
+
+Keep local datasets, model weights, generated audit/output files, credentials,
+and private or sensitive operational data out of commits unless a specific
+reviewed project need requires otherwise. Never commit secrets or credentials.
+
+## Layer 1 Documentation
+
+- [1B — Feature extraction](docs/layer1b.md)
+- [1C — Cosine near-duplicate detection](docs/layer1c.md)
+- [1D — Label consistency analysis](docs/layer1d.md)
+- [1E — Reference-based distribution shift](docs/layer1e.md)
+- [1F — Provenance evidence aggregation](docs/layer1f.md)
+- [1G — pHash duplicate detection](docs/layer1g.md)
+- [1H — Silhouette validation](docs/layer1h.md)
+
+The Data Integrity assignment is complete through internal component 1H. The
+overall TRI-NETRA five-layer platform is not yet complete; Layers 2–4 remain
+planned/assigned, while Layer 5 is complete for the currently implemented UI
+slice.
