@@ -12,5 +12,29 @@ authors = [
     {name = "TRI-NETRA Development Team"}
 ]
 
+[project.optional-dependencies]
+features = [
+    "numpy>=1.26,<3",
+    "Pillow>=10.0,<12",
+]
+dinov2 = [
+    "numpy>=1.26,<3",
+    "Pillow>=10.0,<12",
+    "torch>=2.1",
+    "transformers>=4.40,<5",
+    "safetensors>=0.4",
+]
+resnet50 = [
+    "numpy>=1.26,<3",
+    "Pillow>=10.0,<12",
+    "torch>=2.1",
+    "torchvision>=0.16",
+]
+dev = [
+    "pytest>=8",
+    "numpy>=1.26,<3",
+    "Pillow>=10.0,<12",
+]
+
 [tool.setuptools.packages.find]
 where = ["src"]
