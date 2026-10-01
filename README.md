@@ -64,25 +64,22 @@ TRI-NETRA provides an evidence-based assurance layer for these risks.
 
 ## Layer 1 — Data Integrity Engine
 
-Current development priority.
+Completed for this assignment through Layer 1H. The implemented Data Integrity
+scope is summarized under [Final Data Integrity Status](#final-data-integrity-status).
 
 Responsibilities:
 
 * COCO dataset parsing
 * YOLO dataset parsing
-* Image validation
-* DINOv2 feature extraction
-* ResNet-50 feature extraction
-* Embedding-based similarity analysis
-* k-NN distance analysis
-* Silhouette-based anomaly analysis
-* Perceptual-hash duplicate detection
-* Cosine-similarity analysis
-* Label anomaly detection
-* OOD/anomaly assessment
-* Contributor Risk Index (CRI)
-* Evidence generation
-* Standardized assurance JSON output
+* COCO and YOLO dataset parsing into a normalized dataset representation
+* Local-weight DINOv2 ViT-S/14 primary feature extraction architecture and explicit run-level ResNet-50 fallback
+* Embedding-based cosine near-duplicate detection
+* Neighborhood-based label consistency analysis
+* Reference-based OOD / distribution-shift analysis
+* Provenance-aware evidence aggregation by contributor, source, and batch when metadata exists
+* Independent pixel-based pHash duplicate detection
+* Silhouette validation of feature-space separation against assigned labels
+* Typed, versioned detector results and analyst-readable evidence
 
 Layer 1 must be usable independently from the user interface.
 
@@ -161,6 +158,35 @@ Layer 5 should not contain core detection algorithms. It should consume the outp
 ---
 
 # Layer 1 Architecture
+
+The implemented Data Integrity flow is:
+
+```text
+Layer 1A parsers -> normalized Dataset and labels
+       |                         |
+       v                         +------------------------------+
+Layer 1B -> FeatureBatch                                       |
+       |                                                        v
+       +-> Layer 1C cosine duplicates        Layer 1G pHash from local image files
+       +-> Layer 1D label-neighborhood analysis                 |
+       +-> Layer 1E reference distribution shift                |
+       +-> Layer 1H silhouette validation                       |
+                          |                                     |
+                          +------------------+------------------+
+                                             v
+                        Layer 1F provenance aggregation, when metadata exists
+                                             |
+                                             v
+                              Typed detector results and evidence
+```
+
+Layer 1C and Layer 1G are independent evidence paths: Layer 1C compares
+embeddings, while Layer 1G compares image perceptual hashes. Layers 1D, 1E,
+and 1H consume existing Layer 1B embeddings and do not run another encoder.
+Layer 1F aggregates available evidence and does not infer missing provenance.
+
+The following original overview is conceptual; standardized assurance JSON and
+the Layer 5 UI are future work, not claims about the completed Layer 1A–1H APIs.
 
 ```text
 Dataset
@@ -518,6 +544,35 @@ Never commit:
 
 # Current Development Status
 
+## Final Data Integrity Status
+
+Layers 1A–1H are implemented and covered by the final repository test run.
+Detector scores and thresholds are configurable analytical signals; the test
+suite does not measure real-world detection accuracy or establish malicious
+intent.
+
+| Layer | Implemented functionality | Status |
+| --- | --- | --- |
+| 1A | COCO JSON and YOLO TXT parsing into normalized dataset/image/annotation models | Complete |
+| 1B | DINOv2 ViT-S/14 primary extractor architecture, standardized feature batches, local-weight loading, and explicit run-level ResNet-50 fallback | Implemented; real model inference was not verified by the final test run |
+| 1C | Exact cosine-similarity near-duplicate pairs and connected clusters | Complete |
+| 1D | Top-k embedding-neighborhood label consistency evidence | Complete |
+| 1E | Reference-set nearest-cosine distribution-shift signal | Complete |
+| 1F | Optional contributor/source/batch evidence aggregation with transparent configurable weights | Complete |
+| 1G | Deterministic DCT pHash and Hamming-distance duplicate candidates | Complete |
+| 1H | Cosine-distance silhouette summaries using assigned labels and existing embeddings | Complete |
+
+The final verified suite result was **170 passed, 1 skipped, 0 failed**
+(**171 total**) in **1.85s**. The skipped test is optional; passing tests do
+not establish accuracy, precision, recall, F1, ROC-AUC, attack-detection rate,
+or real-world performance.
+
+The implemented scope is the detector and analysis APIs, typed results, tests,
+and layer documentation. A shared standardized assurance JSON/reporting flow,
+calibrated Contributor Risk Index, measured attack-scenario performance, and
+the Model Integrity, Inference Integrity, and Governance UI layers are not
+claimed as complete here and remain future work.
+
 Layer 1B image feature extraction, including local DINOv2 ViT-S/14 usage and
 preprocessing details, is documented in [`docs/layer1b.md`](docs/layer1b.md).
 Layer 1C near-duplicate detection over Layer 1B embeddings is documented in
@@ -535,7 +590,7 @@ Layer 1H silhouette-based feature/label separation analysis is documented in
 
 | Layer                         | Status            |
 | ----------------------------- | ----------------- |
-| Layer 1 — Data Integrity      | 🚧 In Development |
+| Layer 1 — Data Integrity      | Complete (Layers 1A–1H) |
 | Layer 2 — Model Integrity     | Planned           |
 | Layer 3 — Inference Integrity | Planned           |
 | Layer 4 — Distribution Shift  | Planned           |
@@ -649,4 +704,4 @@ This evidence-first approach is central to TRI-NETRA.
 **Tagline:** Data. Model. Output. One assurance layer.
 **Primary Focus:** Computer-Vision Integrity Assurance
 **Deployment Goal:** Offline / Air-Gapped
-**Current Development Priority:** Layer 1 — Data Integrity Engine
+**Data Integrity Assignment:** Complete through Layer 1H
