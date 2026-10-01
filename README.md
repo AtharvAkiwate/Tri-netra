@@ -522,6 +522,8 @@ Layer 1B image feature extraction, including local DINOv2 ViT-S/14 usage and
 preprocessing details, is documented in [`docs/layer1b.md`](docs/layer1b.md).
 Layer 1C near-duplicate detection over Layer 1B embeddings is documented in
 [`docs/layer1c.md`](docs/layer1c.md).
+Layer 1D label-neighborhood consistency analysis is documented in
+[`docs/layer1d.md`](docs/layer1d.md).
 
 | Layer                         | Status            |
 | ----------------------------- | ----------------- |
