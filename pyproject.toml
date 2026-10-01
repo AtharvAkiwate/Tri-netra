@@ -35,6 +35,11 @@ dev = [
     "numpy>=1.26,<3",
     "Pillow>=10.0,<12",
 ]
+ui = [
+    "streamlit>=1.50,<2",
+    "numpy>=1.26,<3",
+    "Pillow>=10.0,<12",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]

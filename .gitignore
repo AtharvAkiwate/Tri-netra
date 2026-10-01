@@ -30,6 +30,7 @@ models/*
 outputs/findings/*
 outputs/reports/*
 outputs/embeddings/*
+outputs/audit/*
 
 # Large model/data files
 *.pt
