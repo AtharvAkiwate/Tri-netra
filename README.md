@@ -530,6 +530,8 @@ Layer 1F provenance-aware contributor/source evidence aggregation is documented
 in [`docs/layer1f.md`](docs/layer1f.md).
 Layer 1G deterministic pHash image-similarity evidence is documented in
 [`docs/layer1g.md`](docs/layer1g.md).
+Layer 1H silhouette-based feature/label separation analysis is documented in
+[`docs/layer1h.md`](docs/layer1h.md).
 
 | Layer                         | Status            |
 | ----------------------------- | ----------------- |

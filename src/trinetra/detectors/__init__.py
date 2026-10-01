@@ -14,6 +14,18 @@ from trinetra.detectors.phash import (
     hamming_distance,
     perceptual_hash,
 )
+from trinetra.detectors.silhouette import (
+    DEFAULT_MINIMUM_CLASS_SIZE,
+    PerClassSilhouetteSummary,
+    SilhouetteClass,
+    SilhouetteConfiguration,
+    SilhouetteDetector,
+    SilhouetteEmbeddingSpaceError,
+    SilhouetteFinding,
+    SilhouetteResult,
+    SilhouetteValidationError,
+    UnscorableImage,
+)
 
 from trinetra.detectors.near_duplicate import (
     DEFAULT_SIMILARITY_THRESHOLD,
@@ -62,6 +74,16 @@ from trinetra.detectors.ood import (
 )
 
 __all__ = [
+    "DEFAULT_MINIMUM_CLASS_SIZE",
+    "PerClassSilhouetteSummary",
+    "SilhouetteClass",
+    "SilhouetteConfiguration",
+    "SilhouetteDetector",
+    "SilhouetteEmbeddingSpaceError",
+    "SilhouetteFinding",
+    "SilhouetteResult",
+    "SilhouetteValidationError",
+    "UnscorableImage",
     "DEFAULT_PHASH_THRESHOLD",
     "ImageBackendUnavailableError",
     "PHashCluster",
