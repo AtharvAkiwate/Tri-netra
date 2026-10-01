@@ -526,6 +526,8 @@ Layer 1D label-neighborhood consistency analysis is documented in
 [`docs/layer1d.md`](docs/layer1d.md).
 Layer 1E reference-based OOD and distribution-shift analysis is documented in
 [`docs/layer1e.md`](docs/layer1e.md).
+Layer 1F provenance-aware contributor/source evidence aggregation is documented
+in [`docs/layer1f.md`](docs/layer1f.md).
 
 | Layer                         | Status            |
 | ----------------------------- | ----------------- |
