@@ -524,6 +524,8 @@ Layer 1C near-duplicate detection over Layer 1B embeddings is documented in
 [`docs/layer1c.md`](docs/layer1c.md).
 Layer 1D label-neighborhood consistency analysis is documented in
 [`docs/layer1d.md`](docs/layer1d.md).
+Layer 1E reference-based OOD and distribution-shift analysis is documented in
+[`docs/layer1e.md`](docs/layer1e.md).
 
 | Layer                         | Status            |
 | ----------------------------- | ----------------- |

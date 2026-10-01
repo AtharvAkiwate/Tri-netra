@@ -32,6 +32,19 @@ from trinetra.detectors.label_manipulation import (
     NeighborClassCount,
     NeighborEvidence,
 )
+from trinetra.detectors.ood import (
+    DEFAULT_NEAREST_COSINE_THRESHOLD,
+    OODDetectionError,
+    OODDetectionResult,
+    OODDetector,
+    OODFinding,
+    OOD_DETECTOR_NAME,
+    OOD_DETECTOR_VERSION,
+    OOD_SCHEMA_VERSION,
+    ReferenceNeighborEvidence,
+    ReferenceSetMetadata,
+    UnscoredQuery,
+)
 
 __all__ = [
     "DEFAULT_SIMILARITY_THRESHOLD",
@@ -62,4 +75,15 @@ __all__ = [
     "MissingEmbeddingError",
     "NeighborClassCount",
     "NeighborEvidence",
+    "DEFAULT_NEAREST_COSINE_THRESHOLD",
+    "OODDetectionError",
+    "OODDetectionResult",
+    "OODDetector",
+    "OODFinding",
+    "OOD_DETECTOR_NAME",
+    "OOD_DETECTOR_VERSION",
+    "OOD_SCHEMA_VERSION",
+    "ReferenceNeighborEvidence",
+    "ReferenceSetMetadata",
+    "UnscoredQuery",
 ]
