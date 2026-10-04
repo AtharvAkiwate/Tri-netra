@@ -1,0 +1,21 @@
+{
+  "module": "layer2_neurosurgery",
+  "scan_id": "c204d1b1-0d2d-4f8c-b0ec-0e3ec72f5d17",
+  "healed_model_path": "outputs/layer2\\healed_model.pt",
+  "healed_model_sha256": "d729964577f7c60e6ae92baba40c7a573c50537f61717c5a6bf2aae7109683d4",
+  "method": "selective_pruning+unlearning",
+  "layers_pruned": [
+    "features.6"
+  ],
+  "neurons_pruned": 5,
+  "before": {
+    "clean_accuracy": 1.0,
+    "attack_success_rate": 0.95
+  },
+  "after": {
+    "clean_accuracy": 1.0,
+    "attack_success_rate": 0.02
+  },
+  "elapsed_sec": 1.58,
+  "repair_successful": true
+}

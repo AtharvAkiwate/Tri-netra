@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "module": {
+      "type": "string",
+      "const": "layer2_model_security"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "scan_id": {
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "type": "string"
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" },
+        "format": { "type": "string", "enum": ["onnx", "pytorch"] },
+        "sha256": { "type": "string" },
+        "size_bytes": { "type": "integer" },
+        "num_classes": { "type": "integer" }
+      },
+      "required": ["path", "format", "sha256", "size_bytes", "num_classes"]
+    },
+    "access_mode": {
+      "type": "string",
+      "enum": ["white_box", "black_box"]
+    },
+    "fallback_reason": {
+      "type": ["string", "null"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["CLEAN", "SUSPICIOUS", "BACKDOORED"]
+    },
+    "recommended_action": {
+      "type": "string",
+      "enum": ["ACCEPT", "REVIEW", "QUARANTINE"]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "risk_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "suspect": {
+      "type": "object",
+      "properties": {
+        "target_class": { "type": ["integer", "null"] },
+        "target_class_name": { "type": ["string", "null"] },
+        "layer": { "type": ["string", "null"] },
+        "neuron_indices": { "type": "array", "items": { "type": "integer" } },
+        "estimated_poison_fraction": { "type": ["number", "null"] }
+      },
+      "required": ["target_class", "target_class_name", "layer", "neuron_indices", "estimated_poison_fraction"]
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "activation_clustering": {
+          "type": ["object", "null"],
+          "properties": {
+            "silhouette_score": { "type": "number" },
+            "cluster_sizes": { "type": "array", "items": { "type": "integer" } },
+            "flagged_classes": { "type": "array", "items": { "type": "integer" } },
+            "relative_size_of_small_cluster": { "type": "number" }
+          },
+          "required": ["silhouette_score", "cluster_sizes", "flagged_classes", "relative_size_of_small_cluster"]
+        },
+        "spectral_signature": {
+          "type": ["object", "null"],
+          "properties": {
+            "max_outlier_score": { "type": "number" },
+            "threshold": { "type": "number" },
+            "flagged_classes": { "type": "array", "items": { "type": "integer" } }
+          },
+          "required": ["max_outlier_score", "threshold", "flagged_classes"]
+        },
+        "abs_stimulation": {
+          "type": ["object", "null"],
+          "properties": {
+            "max_elevation_gain": { "type": "number" },
+            "mean_output_entropy_drop": { "type": "number" },
+            "flagged_labels": { "type": "array", "items": { "type": "integer" } },
+            "patches_tested": { "type": "integer" }
+          },
+          "required": ["max_elevation_gain", "mean_output_entropy_drop", "flagged_labels", "patches_tested"]
+        },
+        "trigger_reconstruction": {
+          "type": ["object", "null"],
+          "properties": {
+            "mask_l1_norm": { "type": "number" },
+            "anomaly_index": { "type": "number" },
+            "recovered_target_class": { "type": ["integer", "null"] }
+          },
+          "required": ["mask_l1_norm", "anomaly_index", "recovered_target_class"]
+        }
+      },
+      "required": ["activation_clustering", "spectral_signature", "abs_stimulation", "trigger_reconstruction"]
+    },
+    "artifacts": {
+      "type": "object",
+      "properties": {
+        "gradcam_heatmap_png": { "type": ["string", "null"] },
+        "trigger_reconstruction_png": { "type": ["string", "null"] },
+        "activation_cluster_plot_png": { "type": ["string", "null"] },
+        "spectral_plot_png": { "type": ["string", "null"] }
+      },
+      "required": ["gradcam_heatmap_png", "trigger_reconstruction_png", "activation_cluster_plot_png", "spectral_plot_png"]
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "timings_sec": {
+      "type": "object",
+      "additionalProperties": { "type": "number" }
+    }
+  },
+  "required": [
+    "module", "schema_version", "scan_id", "timestamp_utc", "model",
+    "access_mode", "fallback_reason", "verdict", "recommended_action",
+    "confidence", "risk_score", "suspect", "evidence", "artifacts",
+    "limitations", "timings_sec"
+  ]
+}

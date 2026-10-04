@@ -84,6 +84,8 @@ def main() -> None:
         _render_integrity(snapshot, show_all=page == "DATA INTEGRITY")
     elif page == "AUDIT LOG":
         _render_audit_log(snapshot)
+    elif page == "MODEL INTEGRITY":
+        _render_model_integrity(snapshot)
     else:
         _render_not_connected(page)
 
@@ -199,6 +201,58 @@ def _render_audit_log(snapshot) -> None:
     st.download_button("EXPORT AUDIT LOG JSON", data=payload, file_name="trinetra-audit-log.json",
                        mime="application/json", width="stretch")
     st.caption("Export is read-only and includes the complete persisted event history.")
+
+
+def _render_model_integrity(snapshot) -> None:
+    st.markdown('<div class="eyebrow">LAYER 2: MODEL SECURITY & NEUROSURGERY</div>', unsafe_allow_html=True)
+    st.title("Model Integrity")
+    
+    import json
+    report_path = "outputs/layer2/layer2_report.json"
+    if not os.path.exists(report_path):
+        st.info("No Layer 2 report found. Please run the CLI or demo script to generate it.")
+        return
+        
+    with open(report_path, "r") as f:
+        report = json.load(f)
+        
+    st.markdown("### SCAN REPORT")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Verdict", report.get("verdict", "N/A"))
+    c2.metric("Risk Score", report.get("risk_score", 0.0))
+    c3.metric("Recommended Action", report.get("recommended_action", "N/A"))
+    
+    if report.get("verdict") == "BACKDOORED":
+        st.error(f"⚠️ Backdoor Detected! Target Class: {report.get('suspect', {}).get('target_class', 'Unknown')}")
+    else:
+        st.success("✅ Model is clean. No backdoors detected.")
+        
+    st.markdown("---")
+    st.markdown("### VISUAL EVIDENCE")
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        if os.path.exists("outputs/layer2/activation_cluster.png"):
+            st.image("outputs/layer2/activation_cluster.png", caption="Activation Clustering (PCA)", use_container_width=True)
+        if os.path.exists("outputs/layer2/trigger_reconstruction.png"):
+            st.image("outputs/layer2/trigger_reconstruction.png", caption="Trigger Reconstruction", use_container_width=True)
+            
+    with col2:
+        if os.path.exists("outputs/layer2/spectral_signature.png"):
+            st.image("outputs/layer2/spectral_signature.png", caption="Spectral Signatures", use_container_width=True)
+        if os.path.exists("outputs/layer2/heatmap.png"):
+            st.image("outputs/layer2/heatmap.png", caption="Grad-CAM Heatmap (Trigger ROI)", use_container_width=True)
+            
+    healing_path = "outputs/layer2/healing_report.json"
+    if os.path.exists(healing_path):
+        with open(healing_path, "r") as f:
+            heal_report = json.load(f)
+        st.markdown("---")
+        st.markdown("### NEUROSURGERY (HEALING)")
+        st.success("Repair Successful!" if heal_report.get("repair_successful") else "Repair Failed.")
+        hc1, hc2 = st.columns(2)
+        hc1.metric("Before Attack Success Rate", f"{heal_report.get('before', {}).get('attack_success_rate', 0)*100:.1f}%")
+        hc2.metric("After Attack Success Rate", f"{heal_report.get('after', {}).get('attack_success_rate', 0)*100:.1f}%")
 
 
 if __name__ == "__main__":

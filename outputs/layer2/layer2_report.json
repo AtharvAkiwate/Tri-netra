@@ -1,0 +1,59 @@
+{
+  "module": "layer2_model_security",
+  "schema_version": "1.0",
+  "scan_id": "457fb02a-4892-4eca-83da-561c58bc59c2",
+  "timestamp_utc": "2026-10-04T18:55:00.470671+00:00",
+  "model": {
+    "path": "outputs/layer2/healed_model.pt",
+    "format": "pytorch",
+    "sha256": "d729964577f7c60e6ae92baba40c7a573c50537f61717c5a6bf2aae7109683d4",
+    "size_bytes": 100348,
+    "num_classes": 10
+  },
+  "access_mode": "white_box",
+  "fallback_reason": null,
+  "verdict": "CLEAN",
+  "recommended_action": "ACCEPT",
+  "confidence": 1.0,
+  "risk_score": 0.0,
+  "suspect": {
+    "target_class": null,
+    "target_class_name": null,
+    "layer": null,
+    "neuron_indices": [],
+    "estimated_poison_fraction": null
+  },
+  "evidence": {
+    "activation_clustering": {
+      "silhouette_score": 0.9894103407859802,
+      "cluster_sizes": [
+        42,
+        8
+      ],
+      "flagged_classes": [],
+      "relative_size_of_small_cluster": 0.16
+    },
+    "spectral_signature": {
+      "max_outlier_score": 599.1687622070312,
+      "threshold": 15.0,
+      "flagged_classes": [
+        2
+      ]
+    },
+    "abs_stimulation": null,
+    "trigger_reconstruction": null
+  },
+  "artifacts": {
+    "gradcam_heatmap_png": null,
+    "trigger_reconstruction_png": null,
+    "activation_cluster_plot_png": "outputs/layer2\\activation_cluster.png",
+    "spectral_plot_png": "outputs/layer2\\spectral_signature.png"
+  },
+  "limitations": [
+    "ABS fallback tests simple geometric patches only.",
+    "White-box expects standard feature extraction API."
+  ],
+  "timings_sec": {
+    "total": 1.31
+  }
+}
