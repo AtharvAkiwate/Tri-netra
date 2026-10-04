@@ -1,12 +1,12 @@
 {
   "module": "layer2_model_security",
   "schema_version": "1.0",
-  "scan_id": "65ae8691-3e24-4211-aa65-38d483169320",
-  "timestamp_utc": "2026-10-04T18:45:49.928902+00:00",
+  "scan_id": "457fb02a-4892-4eca-83da-561c58bc59c2",
+  "timestamp_utc": "2026-10-04T18:55:00.470671+00:00",
   "model": {
     "path": "outputs/layer2/healed_model.pt",
     "format": "pytorch",
-    "sha256": "f29d87d10a6279f8b41361d3112ff84babfa40d680c5e8e709b41fe00a6bdc8b",
+    "sha256": "d729964577f7c60e6ae92baba40c7a573c50537f61717c5a6bf2aae7109683d4",
     "size_bytes": 100348,
     "num_classes": 10
   },
@@ -54,6 +54,6 @@
     "White-box expects standard feature extraction API."
   ],
   "timings_sec": {
-    "total": 2.37
+    "total": 1.31
   }
 }

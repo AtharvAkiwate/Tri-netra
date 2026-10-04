@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score
+# pyrefly: ignore [missing-import]
 import matplotlib.pyplot as plt
 
 def run_activation_clustering(handle, inputs, preds, output_dir):
@@ -14,6 +15,8 @@ def run_activation_clustering(handle, inputs, preds, output_dir):
     suspect_class = None
     suspect_sizes = []
     suspect_rel_size = 0.0
+    best_reduced = None
+    best_clusters = None
     
     flagged_classes = []
     
@@ -50,12 +53,18 @@ def run_activation_clustering(handle, inputs, preds, output_dir):
             suspect_class = c
             suspect_sizes = [int(c0_size), int(c1_size)]
             suspect_rel_size = float(rel_size)
+            best_reduced = reduced[:, :2] # Only need 2D for plotting
+            best_clusters = clusters
             
     if suspect_class is not None and max_silhouette > 0.45 and suspect_rel_size > 0.25:
         flagged_classes.append(suspect_class)
             
     plot_path = os.path.join(output_dir, "activation_cluster.png")
     if suspect_class is not None:
+        plt.title(f"Activation Clustering - Class {suspect_class}")
+        plt.scatter(best_reduced[best_clusters==0, 0], best_reduced[best_clusters==0, 1], label="Cluster 0", alpha=0.6)
+        plt.scatter(best_reduced[best_clusters==1, 0], best_reduced[best_clusters==1, 1], label="Cluster 1", alpha=0.6)
+        plt.legend()
         plt.savefig(plot_path)
     plt.close()
     

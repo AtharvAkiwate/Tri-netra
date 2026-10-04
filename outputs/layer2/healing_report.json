@@ -1,8 +1,8 @@
 {
   "module": "layer2_neurosurgery",
-  "scan_id": "d6576154-e4fc-4a57-a5eb-000540db342a",
+  "scan_id": "c204d1b1-0d2d-4f8c-b0ec-0e3ec72f5d17",
   "healed_model_path": "outputs/layer2\\healed_model.pt",
-  "healed_model_sha256": "f29d87d10a6279f8b41361d3112ff84babfa40d680c5e8e709b41fe00a6bdc8b",
+  "healed_model_sha256": "d729964577f7c60e6ae92baba40c7a573c50537f61717c5a6bf2aae7109683d4",
   "method": "selective_pruning+unlearning",
   "layers_pruned": [
     "features.6"
@@ -16,6 +16,6 @@
     "clean_accuracy": 1.0,
     "attack_success_rate": 0.02
   },
-  "elapsed_sec": 3.66,
+  "elapsed_sec": 1.58,
   "repair_successful": true
 }
