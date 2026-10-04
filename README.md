@@ -1,4 +1,4 @@
-q# TRI-NETRA
+# TRI-NETRA
 
 **Trustworthy AI Security & Assurance Platform**
 
