@@ -1,0 +1,21 @@
+{
+  "trigger": "checkerboard_4x4_bottomright",
+  "target_class": 0,
+  "poison_rate": 0.2,
+  "seed": 42,
+  "clean_model": {
+    "clean_accuracy": 1.0,
+    "attack_success_rate": 0.1
+  },
+  "backdoored_model": {
+    "clean_accuracy": 1.0,
+    "attack_success_rate": 1.0
+  },
+  "paths": {
+    "clean_pt": "outputs/layer2/demo_models\\clean_model.pt",
+    "clean_onnx": "outputs/layer2/demo_models\\clean_model.onnx",
+    "backdoored_pt": "outputs/layer2/demo_models\\backdoored_model.pt",
+    "backdoored_onnx": "outputs/layer2/demo_models\\backdoored_model.onnx",
+    "locked_bin": "outputs/layer2/demo_models\\backdoored_model_locked.bin"
+  }
+}
